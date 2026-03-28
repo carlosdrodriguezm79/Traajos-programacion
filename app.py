@@ -1,28 +1,24 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-estudiantes = []
+usuario_correcto = "admin"
+password_correcto = "1234"
 
 @app.route("/")
-def inicio():
-    return render_template("index.html")
+def login():
+    return render_template("login.html")
 
-@app.route("/guardar", methods=["POST"])
-def guardar():
+@app.route("/validar", methods=["POST"])
+def validar():
 
-    nombre = request.form["nombre"]
-    edad = request.form["edad"]
+    usuario = request.form["usuario"]
+    password = request.form["password"]
 
-    estudiantes.append({
-        "nombre": nombre,
-        "edad": edad
-    })
+    if usuario == usuario_correcto and password == password_correcto:
+        return render_template("panel.html", usuario=usuario)
 
-    return redirect("/lista")
-
-@app.route("/lista")
-def lista():
-    return render_template("lista.html", estudiantes=estudiantes)
+    else:
+        return "Usuario o contraseña incorrectos"
 
 app.run(debug=True)
