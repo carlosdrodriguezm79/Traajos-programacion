@@ -2,30 +2,27 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
-notas = []
+estudiantes = []
 
 @app.route("/")
 def inicio():
-    return render_template("notas.html", notas=notas)
+    return render_template("index.html")
 
 @app.route("/guardar", methods=["POST"])
 def guardar():
 
     nombre = request.form["nombre"]
-    n1 = float(request.form["nota1"])
-    n2 = float(request.form["nota2"])
-    n3 = float(request.form["nota3"])
+    edad = request.form["edad"]
 
-    promedio = (n1 + n2 + n3) / 3
-
-    notas.append({
+    estudiantes.append({
         "nombre": nombre,
-        "nota1": n1,
-        "nota2": n2,
-        "nota3": n3,
-        "promedio": round(promedio,2)
+        "edad": edad
     })
 
-    return redirect("/")
+    return redirect("/lista")
+
+@app.route("/lista")
+def lista():
+    return render_template("lista.html", estudiantes=estudiantes)
 
 app.run(debug=True)
